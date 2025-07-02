@@ -59,11 +59,15 @@ impl Accommodation for Airbnb {
         self.guests.push((name.to_string(), nights)); // push
     }
 }
-fn book_for_one_night(entity: &mut impl Accommodation, guest: &str) { 
+fn mix_and_match<T: Accommodation, U: Accommodation>(first: &mut T, second: &mut U, guest: &str) {
+    first.book(guest, 1);
+    second.book(guest, 1);
+}
+
+fn book_for_one_night<T: Accommodation>(entity: &mut T, guest: &str) {
     entity.book(guest, 1);
-
-
     
+    // Class 295
 
 /* fn book_for_one_night(entity: &impl Accommodation) { // Class 294
     entity.book("Piers", 1);
@@ -74,13 +78,12 @@ println!("{}", entity.get_description()); */
 
 fn main() {
     let mut hotel = Hotel::new("The Luxe"); // Class 294
-    book_for_one_night(&mut hotel, "Piers");
-    println!("{:?}", hotel);
-
     let mut airbnb = Airbnb::new("Peter");
-    book_for_one_night(&mut airbnb, "Amanda");
+    mix_and_match(&mut hotel, &mut airbnb, "Piers");
+    println!("{:?}", hotel);
     println!("{:#?}", airbnb);
 }
+
 /*
 use std::collections::HashMap;
 trait Accommodation { // Class 292
