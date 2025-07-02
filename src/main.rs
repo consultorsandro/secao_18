@@ -20,6 +20,10 @@ impl Hotel {
             reservations: HashMap::new(),
         }
     }
+
+    fn summarize(&self) -> String {
+        format!("{}: {}", self.name, self.get_description())
+    }
 }
 
 impl Accommodation for Hotel { //Class 291
@@ -58,7 +62,8 @@ impl Accommodation for Airbnb {
 
 fn main() {
     let mut hotel = Hotel::new("The Luxe");
-    println!("{}", hotel.get_description());
+    //println!("{}", hotel.get_description());
+    println!("{}", hotel.summarize()); // Class 293
     hotel.book("Piers", 5);
     println!("{:?}", hotel);
 
