@@ -85,19 +85,16 @@ where
     second.book(guest, 1);
 }
 
-/* fn book_for_one_night(entity: &impl Accommodation) { // Class 294
-    entity.book("Piers", 1);
-    // println!("{}", entity.get_description()); // This line would not work because `entity` is a trait object
-    // Instead, we can use the method defined in the trait
-println!("{}", entity.get_description()); */
+fn choose_best_place_to_stay() -> impl Accommodation + Description {
+    Hotel::new("The Luxe")   // Class 298
+}
 
 
 fn main() {
-    let mut hotel = Hotel::new("The Luxe"); // Class 294
+    let mut hotel = choose_best_place_to_stay();
     let mut airbnb = Airbnb::new("Peter");
     mix_and_match(&mut hotel, &mut airbnb, "Piers");
-    println!("{:?}", hotel);
-    println!("{:#?}", airbnb);
+
 }
 
 /*
