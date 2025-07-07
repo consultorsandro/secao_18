@@ -7,6 +7,12 @@ trait Accommodation {
     fn book(&mut self, name: &str, nights: u32);
 }
 
+trait Description {
+    fn get_description(&self) -> String {
+        String::from("This is a place to stay")
+    }
+}
+
 #[derive(Debug)]
 struct Hotel {
     name: String,
@@ -22,9 +28,12 @@ impl Hotel {
     }
 
     fn summarize(&self) -> String {
-        format!("{}: {}", self.name, self.get_description())
+        format!("{}: {}", self.name, Description::get_description(self))
     }
 }
+
+impl Description for Hotel {}
+
 
 impl Accommodation for Hotel { 
     fn get_description(&self) -> String { 
@@ -52,29 +61,36 @@ impl Airbnb {
 }
 
 impl Accommodation for Airbnb {
-/*     fn get_description(&self) -> String {
-        format!("Please enjoy {}'s apartment", self.host)
-    } */
     fn book(&mut self, name: &str, nights: u32) {
         self.guests.push((name.to_string(), nights)); // push
     }
 }
-fn mix_and_match<T: Accommodation, U: Accommodation>(first: &mut T, second: &mut U, guest: &str) {
+impl Description for Airbnb {
+    fn get_description(&self) -> String {
+        format!("Please enjoy {}'s apartment", self.host)
+    }
+}
+
+
+fn book_for_one_night<T: Accommodation>(entity: &mut T, guest: &str) {
+        entity.book(guest, 1);
+    }
+
+fn mix_and_match<T, U>(first: &mut T, second: &mut U, guest: &str)
+where
+    T: Accommodation + Description,
+    U: Accommodation,
+{
     first.book(guest, 1);
     second.book(guest, 1);
 }
-
-fn book_for_one_night<T: Accommodation>(entity: &mut T, guest: &str) {
-    entity.book(guest, 1);
-    
-    // Class 295
 
 /* fn book_for_one_night(entity: &impl Accommodation) { // Class 294
     entity.book("Piers", 1);
     // println!("{}", entity.get_description()); // This line would not work because `entity` is a trait object
     // Instead, we can use the method defined in the trait
 println!("{}", entity.get_description()); */
-}
+
 
 fn main() {
     let mut hotel = Hotel::new("The Luxe"); // Class 294
